@@ -1,8 +1,8 @@
-opencv-python==4.8.1.78
-mss==9.0.1
-PyAutoGUI==0.9.54
-Pillow==10.1.0
-pygetwindow==0.0.9
-numpy==1.26.2
-pytest==7.4.3
-keyboard==0.13.5
+opencv-python>=4.8.1
+mss>=9.0.1
+PyAutoGUI>=0.9.54
+Pillow>=10.1.0
+pygetwindow>=0.0.9
+numpy>=1.26.2
+pytest>=7.4.3
+keyboard>=0.13.5
