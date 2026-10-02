@@ -19,6 +19,15 @@ from control.action_verifier import ActionVerifier
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("UnMazeSolver")
 
+# Fix for Windows display scaling (DPI)
+# Without this, pyautogui clicks the wrong coordinates if Windows display scaling > 100%
+if sys.platform == 'win32':
+    import ctypes
+    try:
+        ctypes.windll.user32.SetProcessDPIAware()
+    except AttributeError:
+        pass
+
 def main():
     parser = argparse.ArgumentParser(description="UnMaze Autonomous Bot")
     parser.add_argument("--dry-run", action="store_true", help="Detect and solve, but do not click")

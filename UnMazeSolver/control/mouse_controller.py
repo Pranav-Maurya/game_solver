@@ -26,9 +26,12 @@ class MouseController:
             time.sleep(0.05)
 
             # Some browser games require explicit down/up or double click
-            # We use a double click to ensure it registers
-            pyautogui.doubleClick()
-            logger.info(f"Double-clicked piece at ({target_x}, {target_y})")
+            # We use an explicit mouseDown/mouseUp with a tiny delay to ensure the browser
+            # canvas registers the click event. `pyautogui.click()` can be too fast for HTML5 games.
+            pyautogui.mouseDown()
+            time.sleep(0.05)
+            pyautogui.mouseUp()
+            logger.info(f"Clicked piece at ({target_x}, {target_y})")
 
             time.sleep(self.click_delay)
             return True

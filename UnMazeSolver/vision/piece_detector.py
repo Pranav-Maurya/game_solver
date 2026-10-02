@@ -41,6 +41,10 @@ class PieceDetector:
             if min_area < area < (preprocessed_image.shape[0] * preprocessed_image.shape[1] * 0.5):
                 x, y, w, h = cv2.boundingRect(contour)
 
+                # Create an isolated mask for just this piece
+                mask = np.zeros_like(preprocessed_image)
+                cv2.drawContours(mask, [contour], -1, 255, thickness=cv2.FILLED)
+
                 # Calculate the centroid (center of mass) of the contour
                 M = cv2.moments(contour)
                 if M["m00"] != 0:
@@ -49,9 +53,14 @@ class PieceDetector:
                 else:
                     cx, cy = x + w//2, y + h//2
 
-                # Create an isolated mask for just this piece
-                mask = np.zeros_like(preprocessed_image)
-                cv2.drawContours(mask, [contour], -1, 255, thickness=cv2.FILLED)
+                # The geometric centroid of L or U shaped pieces might fall OUTSIDE the piece.
+                # Check if the calculated center actually hits the mask pixel.
+                if mask[cy, cx] == 0:
+                    # If not, find the distance transform to get the point deepest inside the piece
+                    dist = cv2.distanceTransform(mask, cv2.DIST_L2, 5)
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(dist)
+                    # Use the point furthest from any boundary
+                    cx, cy = max_loc
 
                 direction = self.detect_direction(contour, mask, (cx, cy))
 
