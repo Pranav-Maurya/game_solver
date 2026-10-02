@@ -154,7 +154,11 @@ def main():
                 # without success, we briefly move the mouse away to reset any hover state
                 if not changed:
                     logger.debug("Click did not seem to change the board, resetting hover state.")
-                    mouse.hover_piece(0, 0) # Move to corner briefly
+                    # Move to a safe coordinate (100, 100) instead of (0, 0) to avoid triggering
+                    # pyautogui's built-in FAILSAFE mechanism.
+                    safe_x = region[0] + 10 if region else 10
+                    safe_y = region[1] + 10 if region else 10
+                    mouse.hover_piece(safe_x, safe_y)
                     time.sleep(0.1)
 
     except KeyboardInterrupt:
