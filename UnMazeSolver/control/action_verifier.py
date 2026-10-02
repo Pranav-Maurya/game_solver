@@ -19,9 +19,10 @@ class ActionVerifier:
 
         start_time = time.time()
 
+        changed = False
         for _ in range(max_frames):
             if time.time() - start_time > timeout:
-                return False # Timeout
+                break # Timeout
 
             time.sleep(0.05)
             curr_img = self.capture.capture_region(region)
@@ -33,10 +34,13 @@ class ActionVerifier:
             err = np.sum((prev_img.astype("float") - curr_img.astype("float")) ** 2)
             err /= float(prev_img.shape[0] * prev_img.shape[1])
 
-            # If visual difference is very small, animation is likely over
-            if err < 50:
+            if err > 100:
+                changed = True # We saw movement!
+
+            # If visual difference is very small but we previously saw movement, animation is over
+            if err < 50 and changed:
                 return True
 
             prev_img = curr_img
 
-        return False
+        return changed

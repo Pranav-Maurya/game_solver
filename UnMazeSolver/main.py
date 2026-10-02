@@ -138,7 +138,15 @@ def main():
 
                 # 8. Verify action
                 logger.debug("Waiting for board to stabilize...")
-                verifier.wait_for_animation((global_x - 50, global_y - 50, 100, 100), timeout=config.ANIMATION_TIMEOUT)
+                changed = verifier.wait_for_animation((global_x - 50, global_y - 50, 100, 100), timeout=config.ANIMATION_TIMEOUT)
+
+                # If the board did not change, the click likely didn't register.
+                # In order to prevent an infinite loop of clicking the exact same piece endlessly
+                # without success, we briefly move the mouse away to reset any hover state
+                if not changed:
+                    logger.debug("Click did not seem to change the board, resetting hover state.")
+                    mouse.hover_piece(0, 0) # Move to corner briefly
+                    time.sleep(0.1)
 
     except KeyboardInterrupt:
         logger.info("Terminated by user (Ctrl+C).")
