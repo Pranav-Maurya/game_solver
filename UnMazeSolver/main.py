@@ -93,7 +93,7 @@ def main():
             board_bbox = board_detector.detect_board(img)
             if not board_bbox:
                 logger.debug("No board detected. Waiting...")
-                time.sleep(0.5)
+                time.sleep(0.1)
                 continue
 
             bx, by, bw, bh = board_bbox
@@ -108,7 +108,7 @@ def main():
                 if not config.CONTINUOUS_MODE:
                     logger.info("Running in --once mode. Exiting as board is clear.")
                     break
-                time.sleep(1)
+                time.sleep(0.5)
                 continue
 
             # 6. Solver
@@ -117,7 +117,7 @@ def main():
 
             if next_piece_id is None:
                 logger.warning("Solver stuck! No unblocked pieces found.")
-                time.sleep(1)
+                time.sleep(0.5)
                 continue
 
             target_piece = board_state.pieces[next_piece_id]

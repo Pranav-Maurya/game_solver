@@ -33,11 +33,12 @@ class PieceDetector:
         piece_id = 0
 
         # We will filter out very small contours that might be noise or grid dots.
-        min_area = 50
+        min_area = 200
 
         for contour in contours:
             area = cv2.contourArea(contour)
-            if area > min_area:
+            # Filter pieces that are too small or massive bounds
+            if min_area < area < (preprocessed_image.shape[0] * preprocessed_image.shape[1] * 0.5):
                 x, y, w, h = cv2.boundingRect(contour)
 
                 # Calculate the centroid (center of mass) of the contour

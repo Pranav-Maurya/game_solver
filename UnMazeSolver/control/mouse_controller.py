@@ -20,12 +20,10 @@ class MouseController:
 
         try:
             logger.debug(f"Moving mouse to ({target_x}, {target_y})")
-            pyautogui.moveTo(target_x, target_y, duration=0.1) # Smooth, fast movement
+            pyautogui.moveTo(target_x, target_y, duration=0.0) # Instant movement
             pyautogui.click()
             logger.info(f"Clicked piece at ({target_x}, {target_y})")
 
-            # Wait exactly 0.5 seconds as requested by the user,
-            # to allow the piece to zoom off the board.
             time.sleep(self.click_delay)
             return True
 
