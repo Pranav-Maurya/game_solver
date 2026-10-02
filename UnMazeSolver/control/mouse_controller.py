@@ -6,8 +6,10 @@ logger = logging.getLogger(__name__)
 
 class MouseController:
     def __init__(self, click_delay: float = 0.5):
-        # Enable failsafe (moving mouse to corner stops the script)
-        pyautogui.FAILSAFE = True
+        # Disable failsafe to prevent crashes if the user bumps their mouse
+        # to the corner while the bot is running, or if a weird coordinate is generated.
+        # The user can still stop the bot using CTRL+C or ESC.
+        pyautogui.FAILSAFE = False
         self.click_delay = click_delay
 
     def click_piece(self, x: int, y: int, offset_x: int = 0, offset_y: int = 0):

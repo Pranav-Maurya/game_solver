@@ -58,7 +58,12 @@ class BoardState:
 
             # Check for collision with other pieces
             collision = cv2.bitwise_and(current_mask, other_pieces_mask)
-            if cv2.countNonZero(collision) > 0:
+
+            # Allow a tiny margin of error (e.g. 5 pixels overlap)
+            # to account for anti-aliasing or pieces touching tightly.
+            # If we strictly check > 0, almost all pieces might falsely be "blocked"
+            # just by touching a neighboring pixel.
+            if cv2.countNonZero(collision) > 15:
                 return True # Blocked
 
         return False
