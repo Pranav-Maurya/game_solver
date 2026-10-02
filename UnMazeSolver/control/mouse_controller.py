@@ -21,8 +21,14 @@ class MouseController:
         try:
             logger.debug(f"Moving mouse to ({target_x}, {target_y})")
             pyautogui.moveTo(target_x, target_y, duration=0.0) # Instant movement
-            pyautogui.click()
-            logger.info(f"Clicked piece at ({target_x}, {target_y})")
+
+            # Brief pause to let browser register hover state
+            time.sleep(0.05)
+
+            # Some browser games require explicit down/up or double click
+            # We use a double click to ensure it registers
+            pyautogui.doubleClick()
+            logger.info(f"Double-clicked piece at ({target_x}, {target_y})")
 
             time.sleep(self.click_delay)
             return True
