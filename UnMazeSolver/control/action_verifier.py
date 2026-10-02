@@ -23,7 +23,7 @@ class ActionVerifier:
             if time.time() - start_time > timeout:
                 return False # Timeout
 
-            time.sleep(0.1)
+            time.sleep(0.05)
             curr_img = self.capture.capture_region(region)
 
             if curr_img is None:

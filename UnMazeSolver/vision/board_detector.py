@@ -38,7 +38,10 @@ class BoardDetector:
         valid_contours_found = False
 
         for contour in contours:
-            if cv2.contourArea(contour) > 50:
+            area = cv2.contourArea(contour)
+            if area > 100 and area < (image.shape[0] * image.shape[1] * 0.9):
+                # Filter out tiny noise and massive whole-screen bounds
+                # to only capture the clusters of arrow pieces
                 valid_contours_found = True
                 x, y, w, h = cv2.boundingRect(contour)
                 x_min = min(x_min, x)
